@@ -1,0 +1,27 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    date (3.4.0)
+    nokogiri (1.16.7-x86_64-linux)
+      racc (~> 1.4)
+    open-uri (0.5.0)
+      stringio
+      time
+      uri
+    racc (1.8.1)
+    robotex (1.0.0)
+    stringio (3.1.2)
+    time (0.4.1)
+      date
+    uri (1.0.2)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  nokogiri (~> 1.16)
+  open-uri (~> 0.5.0)
+  robotex (~> 1.0)
+
+BUNDLED WITH
+   2.3.11
