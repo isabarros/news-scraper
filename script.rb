@@ -65,8 +65,6 @@ robotex = Robotex.new
 
 # List of websites with their respective headline CSS selectors
 websites = {
-  'https://www.cnn.com' => 'h3.cd__headline a',
-  'https://www.bbc.com' => 'h3.media__title a',
   'https://www.nytimes.com' => 'section'
 }
 
