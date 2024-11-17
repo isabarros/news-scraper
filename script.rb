@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require 'open-uri'
 require 'robotex'
@@ -24,11 +26,11 @@ def fetch_headlines(url, css_selector, robotex)
       excluded_titles = ['Wordle', 'Connections', 'Strands', 'Spelling Bee', 'The Crossword', 'The Mini Crossword']
 
       # String to hold all the headlines
-      headlines_output = ""
+      headlines_output = ''
 
       if url == 'https://www.nytimes.com'
         # Extract all sections containing headlines and descriptions
-        document.css('div, section').each_with_index do |section, index|
+        document.css('div, section').each_with_index do |section, _index|
           # Extract the title (first <p> with 'indicate-hover' class)
           title = section.at_css('p.indicate-hover')&.text&.strip
 
@@ -39,19 +41,19 @@ def fetch_headlines(url, css_selector, robotex)
           next if title && excluded_titles.include?(title)
 
           # Ensure the title is unique and print if both title and description are found
-          if title && short_description && !unique_titles.include?(title)
-            unique_titles.add(title)
-            headlines_output += "Section #{unique_titles.size}:\n"
-            headlines_output += "Title: #{title}\n"
-            headlines_output += "Short Description: #{short_description}\n"
-            headlines_output += "-" * 50 + "\n"
-          end
+          next unless title && short_description && !unique_titles.include?(title)
+
+          unique_titles.add(title)
+          headlines_output += "Section #{unique_titles.size}:\n"
+          headlines_output += "Title: #{title}\n"
+          headlines_output += "Short Description: #{short_description}\n"
+          headlines_output += "#{'-' * 50}\n"
         end
       else
         # Extract and print the headlines using the provided CSS selector
         headlines = document.css(css_selector)
         headlines_output += "Headlines from #{url}:\n"
-        headlines.each_with_index do |headline, index|
+        headlines.each_with_index do |headline, _index|
           headline_text = headline.text.strip
           # Avoid duplicate headlines
           unless unique_titles.include?(headline_text)
@@ -77,13 +79,13 @@ end
 def send_email(body)
   Mail.defaults do
     if ENV['ENV'] == 'development'
-      puts "Email content for development environment:"
-      puts "Subject: Latest Headlines"
+      puts 'Email content for development environment:'
+      puts 'Subject: Latest Headlines'
       puts body
 
       # In development, use letter_opener to preview emails in the browser
       delivery_method LetterOpener::DeliveryMethod, location: File.expand_path('../tmp/letter_opener', __FILE__)
-  else
+    else
       # In other environments, use SMTP
       delivery_method :smtp, {
         address: 'smtp.mailgun.org',
@@ -105,7 +107,7 @@ def send_email(body)
   end
 
   mail.deliver!
-  puts "Email sent successfully!"
+  puts 'Email sent successfully!'
 end
 
 # Initialize Robotex
@@ -113,6 +115,9 @@ robotex = Robotex.new
 
 # List of websites with their respective headline CSS selectors
 websites = {
+  # 'https://www.folha.uol.com.br/' => 'h2',
+  # 'https://elpais.com/america/' => 'article div header h2 a',
+  # 'https://www.lemonde.fr/en/' => 'p',
   'https://www.nytimes.com' => 'section'
 }
 
