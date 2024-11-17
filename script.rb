@@ -86,9 +86,9 @@ def send_email(body)
   else
       # In other environments, use SMTP
       delivery_method :smtp, {
-        address: 'smtp.gmail.com',
+        address: 'smtp.mailgun.org',
         port: 587,
-        domain: 'gmail.com',
+        domain: ENV['DOMAIN'],
         user_name: ENV['EMAIL_ADDRESS'],  # Using environment variable for email
         password: ENV['EMAIL_PASSWORD'],  # Using environment variable for password
         authentication: 'plain',
